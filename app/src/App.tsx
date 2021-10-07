@@ -4,7 +4,7 @@ import Admin from './Admin';
 import NavigationsBar from "./Navbar";
 
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { TimeList } from './types';
 
 function App() {

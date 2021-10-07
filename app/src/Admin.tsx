@@ -11,15 +11,22 @@ const Admin = (props: PropsTimeList) => {
     const url = 'http://localhost:4000/timelst/';
 
     const addTime = () => {
-        let array = [];
+        let array: TimeList[] = [];
         const delta = sDelta.current != null ? parseInt(sDelta.current.value) : 10;
         let hour, min;
         let currentTime = sTime.current != null ? sTime.current.value : "10:00";
         [hour, min] = StringTimeify(currentTime);
         if (min - delta < 0)
-            hour = (hour - 1) % 24
-        min = (min - delta) % 60;
+            hour = (24 + hour - 1) % 24
+        min = (60 + min - delta) % 60;
         //stime = stime.substring(0, 3) + (parseInt(stime.substring(3)))
+        for (let index = 1; index < 6; index++) {
+            array.push({ id: index, title: TimeStringify(hour, min) });
+            if (min + delta >= 60)
+                hour = (hour + 1) % 24;
+            min = (min + delta) % 60;
+        }
+        setTime([...array]);
     };
     const StringTimeify = (str: string) => {
         let hour = parseInt(str.substring(0, 2));
@@ -28,10 +35,8 @@ const Admin = (props: PropsTimeList) => {
     }
     const TimeStringify = (hour: number, min: number) => {
         let sRet = "";
-        if (hour < 10)
-            sRet += "0" + hour + ":";
-        if (min < 10)
-            sRet = "0" + min;
+        sRet += hour < 10 ? "0" + hour : hour;
+        sRet += min < 10 ? ":0" + min : ":" + min;
         return sRet;
     }
     const nextTime = () => {
@@ -55,7 +60,6 @@ const Admin = (props: PropsTimeList) => {
         //React Time Update not needed for 2 Clients 
         for (let i = 0; i < time.length - 1; i++)
             time[i].title = array[i];
-        console.log(array)
         setTime([...time]);
     }
 
@@ -66,6 +70,7 @@ const Admin = (props: PropsTimeList) => {
             <p>REST</p>
             {!isPanding && <button onClick={nextTime}>Next</button>}
             {isPanding && <button onClick={nextTime}>Loading</button>}
+            {<button onClick={addTime}>Time</button>}
         </div >
     );
 }
