@@ -38,11 +38,9 @@ height: 100%;
   display: table;
       }
 .time { grid-area: time;}
+.time h1 {text-align: center;}
 .info { grid-area: info;}
 
-div.timewrapper{
-  display: table-row;
-}
 div.timeline ,div.timeline-spe{
   padding: 30px 16px;
   margin: 20px 20px;
