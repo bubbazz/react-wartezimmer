@@ -1,0 +1,91 @@
+/*@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap'); */
+
+* {
+  margin: 0;
+  font-family: "Arial";
+}
+body, html , .app,#root {
+height: 100%;
+}
+.navbar {
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  margin: 0 auto;
+  border-bottom: 1px solid #f2f2f2;
+}
+.navbar .links {
+  margin-left: auto;
+}
+.navbar a {
+  margin-left: 16px;
+  text-decoration: none;
+  padding: 6px;
+}
+.content {
+  display: grid;
+  grid-auto-flow: column dense; 
+  grid-template-columns: 1fr 1fr 1fr; 
+  grid-template-rows: 1fr 1fr 1fr; 
+  gap: 0px 0px; 
+  grid-template-areas: 
+    "home home time"
+    "home home info"
+    "home home info"; 
+}
+.home {
+  grid-area: home;
+  display: table;
+      }
+.time { grid-area: time;}
+.info { grid-area: info;}
+
+div.timewrapper{
+  display: table-row;
+}
+div.timeline ,div.timeline-spe{
+  padding: 30px 16px;
+  margin: 20px 20px;
+  background-color: #e97b9c;
+  border-bottom: 1px solid #fafafa;
+  box-shadow: 1px 1px 3px 5px rgba(0,0,0,0.1);
+  border-radius: 8px;
+}
+div.timeline-spe{
+  background-color: #be1447;
+  border-bottom: 5px solid #aa123f;
+}
+div.timeline h2{
+  text-align: center;
+  font-size:30px;
+}
+div.timeline-spe h2{
+  text-align: center;
+  font-size:100px;
+}
+.admin {
+  max-width: 400px;
+  margin: 0 auto;
+  text-align: center;
+}
+.admin button {
+  background: #f1356d;
+  color: #fff;
+  border: 0;
+  padding: 8px 8px;
+  margin: 8px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+.create p {
+  text-align: left;
+  display: block;
+}
+.admin input, .admin textarea, .admin select {
+  width: 100%;
+  padding: 6px 10px;
+  margin: 10px 0;
+  border: 1px solid #ddd;
+  box-sizing: border-box;
+  display: block;
+}
