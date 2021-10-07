@@ -4,12 +4,12 @@ import Admin from './Admin';
 import NavigationsBar from "./Navbar";
 
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
-import { useState, useEffect } from 'react';
-
+import React, { useState, useEffect } from 'react';
+import { TimeList } from './types';
 
 function App() {
   // mook data is in ./data/db.json
-  const [stateTimeLst, setstateTimeLst] = useState(null);
+  const [stateTimeLst, setstateTimeLst] = useState<TimeList[]>([]);
   useEffect(() => {
     const myInt = setInterval(() => {
       fetch('http://localhost:4000/timelst')
