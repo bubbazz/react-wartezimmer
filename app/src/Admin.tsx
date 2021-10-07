@@ -1,8 +1,9 @@
 import { useRef, useState } from "react";
+
 const Admin = ({ time, setTime }) => {
     // Binding Vars
-    const sTime = useRef();
-    const sDelta = useRef();
+    const sTime = useRef<HTMLInputElement>();
+    const sDelta = useRef<HTMLInputElement>();
     //
     const [isPanding, setIsPanding] = useState(false);
     const url = 'http://localhost:4000/timelst/';
@@ -12,10 +13,11 @@ const Admin = ({ time, setTime }) => {
         const delta = parseInt(sDelta.current.value);
         let hour, min;
         [hour, min] = StringTimeify(sTime.current.value);
+        [hour, min] = StringTimeify(sTime.current.value);
         if (min - delta < 0)
             hour = (hour - 1) % 24
         min = (min - delta) % 60;
-        stime = stime.substring(0, 3) + (parseInt(stime.substring(3)))
+        //stime = stime.substring(0, 3) + (parseInt(stime.substring(3)))
     };
     const StringTimeify = (str) => {
         let hour = parseInt(str.substring(0, 2));
@@ -68,8 +70,8 @@ const Admin = ({ time, setTime }) => {
     }
     return (
         <div className="admin">
-            <input type="text" placeholder="Uhrzeit" ref={sTime} /><br />
-            <input type="number" placeholder="Delta" ref={sDelta} /><br />
+            <input type="text" placeholder="Uhrzeit" value="10:00" ref={sTime} /><br />
+            <input type="number" placeholder="Delta" value="10" ref={sDelta} /><br />
             <p>REST</p>
             {!isPanding && <button onClick={nextTime}>Next</button>}
             {isPanding && <button onClick={nextTime}>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA</button>}
