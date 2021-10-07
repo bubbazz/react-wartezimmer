@@ -7,17 +7,32 @@ import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { TimeList } from './types';
 
+import { w3cwebsocket } from 'websocket';
+import Time from './Time';
+
+const client = new w3cwebsocket('ws://localhost:4001');
+
 function App() {
   // mook data is in ./data/db.json
-  const [stateTimeLst, setstateTimeLst] = useState<TimeList[]>([]);
+  const [stateTimeLst, setstateTimeLst] = useState<TimeList[]>([{ id: 0, title: "FEHLER" }]);
+  const [realtime, setRealtime] = useState<Date>(new Date);
   useEffect(() => {
-    const myInt = setInterval(() => {
-      fetch('http://localhost:4000/timelst')
-        .then(resp => resp.json())
-        .then(data => setstateTimeLst(data));
-    }, 3000);
-    return () => clearInterval(myInt);
+    client.onopen = () => {
+
+    };
+    client.onmessage = (message) => {
+      var json = JSON.parse(message.data.toString());
+      if (json.what === "lst")
+        setstateTimeLst(json.data);
+      else if (json.what === "time") {
+        setRealtime(new Date(json.data));
+      }
+    };
+    client.onerror = (error) => {
+      console.log(error);
+    }
   }, []); // just once loading no dep []
+
   return (
     <Router>
       <div className="app">
@@ -25,12 +40,12 @@ function App() {
         <div className="content">
           <Switch>
             <Route exact path="/">
-              <div className="time">Time </div>
+              <Time realtime={realtime} />
               <div className="info">info</div>
-              {stateTimeLst && <TimeView time={stateTimeLst} />}
+              {stateTimeLst && <TimeView timelst={stateTimeLst} />}
             </Route>
             <Route path="/admin">
-              <Admin time={stateTimeLst} setTime={setstateTimeLst} />
+              <Admin time={stateTimeLst} setTime={setstateTimeLst} websocket={client} />
             </Route>
           </Switch>
         </div>

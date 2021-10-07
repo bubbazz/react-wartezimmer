@@ -1,9 +1,9 @@
+import { TimeList } from "./types";
 
-const TimeView = (props) => {
-    const timelst = props.time
+const TimeView = ({ timelst }: any) => {
     return (
         <div className="home">
-            {timelst.map(time => (
+            {timelst.map((time: TimeList) => (
                 <div className="timewrapper">
                     < div className={time.id === 3 ? "timeline-spe" : "timeline"} key={time.id} >
                         <h2>{time.title}</h2>

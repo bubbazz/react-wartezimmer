@@ -5,8 +5,9 @@ EXPOSE 3000 4000
 WORKDIR /app
 # install app dependencies
 COPY ./package.json ./
-COPY ./package-lock.json ./
-RUN npm install --silent
+#COPY ./package-lock.json ./
+#RUN npm install --silent
+RUN npm install
 #RUN npm install react-scripts@3.4.1 -g --silentexit
 # first Run 
 # RUN npx json-server -- watch data/db.json --port 4000
