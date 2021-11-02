@@ -1,6 +1,10 @@
+import { FC } from "react";
 import { TimeList } from "./types";
 
-const TimeView = ({ timelst }: any) => {
+interface TimeViewProps {
+    timelst: TimeList[]
+}
+const TimeView: FC<TimeViewProps> = ({ timelst }) => {
     return (
         <div className="home">
             {timelst.map((time: TimeList) => (

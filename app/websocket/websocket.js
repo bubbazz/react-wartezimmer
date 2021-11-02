@@ -26,19 +26,29 @@ wsServer.on('request', function (request) {
     console.log('connected: ' + userID)
 
     connection.send(JSON.stringify({ what: 'lst', data: mes }));
+    //connection.send(JSON.stringify({ what: 'info', data: info }));
 
-    let interval = setInterval(() => connection.send(JSON.stringify({ what: 'time', data: new Date().toString() })), 1000);
+    //let interval = setInterval(() => connection.send(JSON.stringify({ what: 'time', data: new Date().toString() })), 1000);
+
     JSON.stringify({ what: 'time', data: new Date })
     connection.on('message', function (message) {
         console.log('Received Message:', message.utf8Data);
-        mes = JSON.parse(message.utf8Data.toString());
+        const json = JSON.parse(message.utf8Data.toString());
+        var data;
+        if (json.what === "lst") {
+            mes = json.data;
+            data = mes;
+        } else if (json.what === "info") {
+            mes = json.data;
+            data = info;
+        }
         clients.forEach(element => {
             console.log("Send User :" + element.id + "the Message")
-            element.connection.send(JSON.stringify({ what: 'lst', data: mes }))
+            element.connection.send(JSON.stringify({ what: json.what, data: data }))
         });
     });
     connection.on('close', function (reasonCode, description) {
         console.log('Client has disconnected.');
-        clearInterval(interval);
+        //clearInterval(interval);
     });
 });

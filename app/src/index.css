@@ -6,13 +6,19 @@
 }
 body, html , .app,#root {
 height: 100%;
+background-color: #4d609e;
+}
+.app {
+  display: flex;
+  flex-flow: column;
 }
 .navbar {
   padding: 20px;
   display: flex;
+  width: 96%;
   align-items: center;
   margin: 0 auto;
-  border-bottom: 1px solid #f2f2f2;
+  border-bottom: 1px solid #6c86db;
 }
 .navbar .links {
   margin-left: auto;
@@ -23,29 +29,50 @@ height: 100%;
   padding: 6px;
 }
 .content {
+  flex-grow: 1;
   display: grid;
   grid-auto-flow: column dense; 
   grid-template-columns: 1fr 1fr 1fr; 
   grid-template-rows: 1fr 1fr 1fr; 
   gap: 0px 0px; 
   grid-template-areas: 
+    "home home topinfo"
     "home home time"
-    "home home info"
-    "home home info"; 
+    "home home botinfo"; 
 }
 .home {
   grid-area: home;
-  display: table;
-      }
-.time { grid-area: time;}
-.time h1 {text-align: center;}
-.info { grid-area: info;}
+  flex-flow: column;
+  }
+.time { grid-area: time;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #645459;
+  border-bottom: 1px solid #6c86db;
+  border-radius: 8px;
+  margin: 10px 10px 0px 0px;
+}
+  
+.time h1 {
+  text-align: center;
+  font-size: 80px;
+}
+.info {
+  background-color: #645459;
+  border-bottom: 1px solid #6c86db;
+  border-radius: 8px;
+  margin: 10px 0px 0px 10px;
+  font-size: 30px;
+}
+.one{ grid-area: topinfo;}
+.two{ grid-area: botinfo;}
 
 div.timeline ,div.timeline-spe{
-  padding: 30px 16px;
-  margin: 20px 20px;
-  background-color: #e97b9c;
-  border-bottom: 1px solid #fafafa;
+  padding: 10px 16px;
+  margin: 50px 20px;
+  background-color: #645459;
+  border-bottom: 1px solid #6c86db;
   box-shadow: 1px 1px 3px 5px rgba(0,0,0,0.1);
   border-radius: 8px;
 }
@@ -55,14 +82,14 @@ div.timeline-spe{
 }
 div.timeline h2{
   text-align: center;
-  font-size:30px;
+  font-size:72px;
 }
 div.timeline-spe h2{
   text-align: center;
   font-size:100px;
 }
 .admin {
-  max-width: 400px;
+  max-width: 800px;
   margin: 0 auto;
   text-align: center;
 }

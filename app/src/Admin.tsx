@@ -1,9 +1,15 @@
-import { createRef, useState } from "react";
-import { PropsTimeList, TimeList } from "./types";
-const Admin = (props: PropsTimeList) => {
-    const time = props.time;
-    const setTime = props.setTime;
-    const client = props.websocket;
+import { createRef, Dispatch, FC, SetStateAction, useState } from "react";
+import { w3cwebsocket } from "websocket";
+import { TimeList } from "./types";
+
+interface AdminProps {
+    time: TimeList[],
+    setTime: Dispatch<SetStateAction<TimeList[]>>,
+    websocket: w3cwebsocket,
+    text: string,
+    setText: Dispatch<SetStateAction<string>>,
+}
+const Admin: FC<AdminProps> = ({ time, setTime, websocket: client, text, setText }) => {
     // Binding Vars
     const sTime = createRef<HTMLInputElement>();
     const sDelta = createRef<HTMLInputElement>();
@@ -53,26 +59,24 @@ const Admin = (props: PropsTimeList) => {
         for (let i = 0; i < time.length - 1; i++)
             array.push(time[i].title);
         setIsPanding(true);
-        /*
-        for (let i = 1; i < time.length + 1; i++)
-            fetch(url + i, {
-                method: 'PUT',
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ title: array[i - 1] })
-            }).then(() => setIsPanding(false))
-        */
         //React Time Update not needed for 2 Clients 
-        for (let i = 0; i < time.length - 1; i++)
+        for (let i = 0; i < time.length; i++)
             time[i].title = array[i];
         setTime([...time]);
-        client.send(JSON.stringify(time));
+        client.send(JSON.stringify({ what: "lst", data: time }));
         setIsPanding(false);
     }
 
     return (
         <div className="admin">
-            <input type="text" placeholder="Uhrzeit" value="10:00" name="sTime" ref={sTime} /><br />
-            <input type="number" placeholder="Delta" value="10" name="sDelta" ref={sDelta} /><br />
+            <label> Uhrzeit eingeben </label>
+            <input type="text" placeholder="Uhrzeit" name="sTime" ref={sTime} /><br />
+            <input type="number" placeholder="Delta" name="sDelta" ref={sDelta} /><br />
+            <textarea name="" onChange={(e) => {
+                setText(e.target.value);
+                client.send(JSON.stringify({ what: "info", data: e.target.value }));
+            }
+            }>{text}</textarea>
             <p>REST</p>
             {!isPanding && <button onClick={nextTime}>Next</button>}
             {isPanding && <button onClick={nextTime}>Loading</button>}

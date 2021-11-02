@@ -1,4 +1,8 @@
-const Time = (props: any) => {
+import { FC } from "react";
+interface TimeProps {
+    realtime: Date;
+}
+const Time: FC<TimeProps> = (props: TimeProps) => {
     var time: Date = props.realtime;
     return (
         <div className="time">
