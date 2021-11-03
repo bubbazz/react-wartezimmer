@@ -7,17 +7,19 @@ import { useState, useEffect } from 'react';
 import { TimeList } from './types';
 
 import { w3cwebsocket } from 'websocket';
-import Time from './Time';
 import Info from './Info';
+import CalleeInfo from './CalleeInfo';
 
 const client = new w3cwebsocket('ws://localhost:4001');
 
 function App() {
   // mook data is in ./data/db.json
   const [stateTimeLst, setstateTimeLst] = useState<TimeList[]>([{ id: 11, title: "FEHLER" }]);
-  useState<TimeList>({ id: 11, title: "10:10" })
-  const [realtime, setRealtime] = useState<Date>(new Date());
-  const [text, setText] = useState<string>("Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.");
+  const [stateCallee, setStateCallee] = useState<TimeList>({ id: 11, title: "10:10" })
+  //const [realtime, setRealtime] = useState<Date>(new Date());
+  const [info1, setInfo1] = useState<string>("Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam  est Lorem ipsum dolor sit amet.");
+  const [info2, setInfo2] = useState<string>("Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam  est Lorem ipsum dolor sit amet.");
+  var infos = [{ text: info1, setText: setInfo1, jsonstr: "infotop" }, { text: info2, setText: setInfo2, jsonstr: "infobot" }];
   useEffect(() => {
     client.onopen = () => {
 
@@ -28,11 +30,15 @@ function App() {
         case "lst":
           setstateTimeLst(json.data);
           break;
-        case "time":
+        /*case "time":
           setRealtime(new Date(json.data));
           break;
-        case "info":
-          setText(json.data);
+          */
+        case "infotop":
+          setInfo1(json.data);
+          break;
+        case "infobot":
+          setInfo2(json.data);
           break;
         default:
           break;
@@ -42,7 +48,10 @@ function App() {
       console.log(error);
     }
   }, []); // just once loading no dep []
-
+  useEffect(() => {
+    if (stateTimeLst.length >= 3 && stateTimeLst[2] != null)
+      setStateCallee(stateTimeLst[2]);
+  }, [stateTimeLst])
   return (
     <Router>
       <div className="app">
@@ -50,13 +59,13 @@ function App() {
         <div className="content">
           <Switch>
             <Route exact path="/">
-              <Info text={text} id="one" />
-              <Time realtime={realtime} />
-              <Info text={text} id="two" />
+              <Info text={info1} id="one" />
+              <CalleeInfo calleeTime={stateCallee} />
+              <Info text={info2} id="two" />
               {stateTimeLst && <TimeView timelst={stateTimeLst} />}
             </Route>
             <Route path="/admin">
-              <Admin time={stateTimeLst} setTime={setstateTimeLst} websocket={client} text={text} setText={setText} />
+              <Admin time={stateTimeLst} setTime={setstateTimeLst} websocket={client} infos={infos} />
             </Route>
           </Switch>
         </div>

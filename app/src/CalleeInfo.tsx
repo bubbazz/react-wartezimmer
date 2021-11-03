@@ -6,10 +6,11 @@ interface Props {
 }
 
 const CalleeInfo: FC<Props> = ({ calleeTime }) => {
-    return (<div className="CalleeInfo">
+    var timeEndsWith5 = calleeTime.title.endsWith("5");
+    return (<div className="calleinfo">
         <h1>Aufruf</h1>
-        {calleeTime.title.endsWith("5") && <h2>Wartezimmer3</h2>}
-        {<h2>Laborwarteplatz</h2>}
+        {!timeEndsWith5 && <h2>Wartezimmer3</h2>}
+        {timeEndsWith5 && <h2>Laborwarteplatz</h2>}
     </div>);
 }
 
