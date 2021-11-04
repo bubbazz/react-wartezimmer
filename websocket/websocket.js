@@ -1,11 +1,17 @@
-const webSocketsServerPort = 4001;
+const webSocketsServerPort = 4000;
+const webSocketsServerHostname = '0.0.0.0';
 const webSocketServer = require('websocket').server;
 const fs = require('fs');
 const http = require('http');
 // Spinning the http server and the websocket server.
 const server = http.createServer();
-server.listen(webSocketsServerPort);
-console.log("Server listen on " + webSocketsServerPort + " okay")
+http.createServer(function (req, res) {
+    res.write('Hello World!'); //write a response to the client
+    res.end(); //end the response
+}).listen(8000);
+server.listen(webSocketsServerPort, webSocketsServerHostname, () => {
+    console.log('server lisen on http://' + webSocketsServerHostname + ":" + webSocketsServerPort)
+});
 const wsServer = new webSocketServer({
     httpServer: server
 });

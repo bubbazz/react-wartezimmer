@@ -10,7 +10,7 @@ import { w3cwebsocket } from 'websocket';
 import Info from './Info';
 import CalleeInfo from './CalleeInfo';
 
-const client = new w3cwebsocket('ws://localhost:4001');
+const client = new w3cwebsocket('ws://localhost:4000');
 
 function App() {
   // mook data is in ./data/db.json
