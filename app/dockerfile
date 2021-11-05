@@ -1,20 +1,12 @@
 FROM node:alpine
-# expose ports
-#EXPOSE 3000 4000
 # specify Working dir 
 WORKDIR /app
 # install app dependencies
-COPY package.json ./
-COPY package-lock.json ./
+COPY package.json .
 RUN npm install
-RUN npm install react-scripts 
-#-g --silentexit
-# first Run 
 # RUN npx json-server -- watch data/db.json --port 4000
-
 # copy App 
-COPY . /.
-
+COPY . .
 CMD ["npm", "start"]
 
 # docker buld & run
