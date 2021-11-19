@@ -1,16 +1,19 @@
 version: "3.9"
-   
+
 services:
   websocket:
     build: ./websocket/.
+    volumes:
+      - "./websocket/data:/app/data"
     ports:
       - "4000:4000"
       - "8000:8000"
 
   web:
     build: ./app/.
+    volumes:
+      - "./app/src/config:/app/src/config"
     ports:
       - "3000:3000"
     depends_on:
       - websocket
-
