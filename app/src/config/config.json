@@ -1,0 +1,4 @@
+{
+    "SERVER_URL": "ws://localhost:4000",
+    "AUDIO_URL": "./bell.mp3"
+}

@@ -1,6 +1,7 @@
 import TimeView from './TimeView';
 import Admin from './Admin';
 import NavigationsBar from "./Navbar";
+import ConfigData from "./config/config.json";
 
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import { useState, useEffect } from 'react';
@@ -10,7 +11,8 @@ import { w3cwebsocket } from 'websocket';
 import Info from './Info';
 import CalleeInfo from './CalleeInfo';
 
-const client = new w3cwebsocket('ws://localhost:4000');
+const path = require('./bell.mp3');
+const client = new w3cwebsocket(ConfigData.SERVER_URL);
 
 function App() {
   // mook data is in ./data/db.json
@@ -20,7 +22,10 @@ function App() {
   const [info1, setInfo1] = useState<string>("Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam  est Lorem ipsum dolor sit amet.");
   const [info2, setInfo2] = useState<string>("Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam  est Lorem ipsum dolor sit amet.");
   var infos = [{ text: info1, setText: setInfo1, jsonstr: "infotop" }, { text: info2, setText: setInfo2, jsonstr: "infobot" }];
+  const [audioBlink] = useState(new Audio(path.default));
+
   useEffect(() => {
+
     client.onopen = () => {
 
     };
@@ -49,9 +54,20 @@ function App() {
     }
   }, []); // just once loading no dep []
   useEffect(() => {
-    if (stateTimeLst.length >= 3 && stateTimeLst[2] != null)
+    if (stateTimeLst.length >= 3 && stateTimeLst[2] != null) {
       setStateCallee(stateTimeLst[2]);
+    }
   }, [stateTimeLst])
+
+  useEffect(() => {
+    const playbak = () => {
+      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+      // chrome://settings/content/sound
+      if (window.location.pathname === "/")
+        audioBlink.play()
+    };
+    playbak();
+  }, [audioBlink, stateTimeLst]);
   return (
     <Router>
       <div className="app">
