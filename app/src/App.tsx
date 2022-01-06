@@ -13,7 +13,9 @@ import CalleeInfo from './CalleeInfo';
 
 const path = require('./bell.mp3');
 const client = new w3cwebsocket(ConfigData.SERVER_URL);
-
+const audioBlink = new Audio(path.default);
+var loopNum = -1;
+const que: any[] = [];
 function App() {
   // mook data is in ./data/db.json
   const [stateTimeLst, setstateTimeLst] = useState<TimeList[]>([{ id: 11, title: "FEHLER" }]);
@@ -22,18 +24,30 @@ function App() {
   const [info1, setInfo1] = useState<string>("Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam  est Lorem ipsum dolor sit amet.");
   const [info2, setInfo2] = useState<string>("Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam  est Lorem ipsum dolor sit amet.");
   var infos = [{ text: info1, setText: setInfo1, jsonstr: "infotop" }, { text: info2, setText: setInfo2, jsonstr: "infobot" }];
-  const [audioBlink] = useState(new Audio(path.default));
 
   useEffect(() => {
-
-    client.onopen = () => {
-
-    };
+    audioBlink.onplay = () => {
+      setstateTimeLst(que.shift());
+    }
+    audioBlink.onended = () => {
+      if (loopNum-- > 0) {
+        audioBlink.play();
+      }
+    }
     client.onmessage = (message) => {
       var json = JSON.parse(message.data.toString());
       switch (json.what) {
         case "lst":
-          setstateTimeLst(json.data);
+          if (loopNum < 0)
+            setstateTimeLst(json.data);
+          que.push(json.data);
+          if (json.data.length >= 3 && json.data[2] != null) {
+            setStateCallee(json.data[2]);
+          }
+          if (window.location.pathname === "/") {
+            audioBlink.play();
+          }
+          loopNum++;
           break;
         /*case "time":
           setRealtime(new Date(json.data));
@@ -53,25 +67,10 @@ function App() {
       console.log(error);
     }
   }, []); // just once loading no dep []
-  useEffect(() => {
-    if (stateTimeLst.length >= 3 && stateTimeLst[2] != null) {
-      setStateCallee(stateTimeLst[2]);
-    }
-  }, [stateTimeLst])
-
-  useEffect(() => {
-    const playbak = () => {
-      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-      // chrome://settings/content/sound
-      if (window.location.pathname === "/")
-        audioBlink.play()
-    };
-    playbak();
-  }, [audioBlink, stateTimeLst]);
   return (
     <Router>
       <div className="app">
-        <NavigationsBar />
+        {window.innerHeight !== window.screen.height && <NavigationsBar />}
         <div className="content">
           <Switch>
             <Route exact path="/">

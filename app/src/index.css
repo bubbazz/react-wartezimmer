@@ -14,7 +14,7 @@ background-color: #4d609e;
 }
 .navbar {
   padding: 20px;
-  display: flex;
+  display:flex;
   width: 96%;
   align-items: center;
   margin: 0 auto;
@@ -47,6 +47,7 @@ background-color: #4d609e;
 grid-area: home;
 display: flex;
 flex-direction: column;
+justify-content: space-between;
 }
 
 .time { grid-area: time;
@@ -78,8 +79,10 @@ flex-direction: column;
   border-bottom: 1px solid #6c86db;
   border-radius: 8px;
   margin: 10px 0px 0px 10px;
-  font-size: 30px;
+  font-size: 72px;
+  overflow: hidden;
 }
+.info h1{  font-size: 72px;}
 .one{ grid-area: topinfo;}
 .two{ grid-area: botinfo;}
 
@@ -128,6 +131,9 @@ div.timeline-spe h2{
   margin: 8px;
   border-radius: 8px;
   cursor: pointer;
+}
+.adminwrapper button:disabled{
+  background-color: gray;
 }
 .create p {
   text-align: left;

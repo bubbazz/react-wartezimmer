@@ -23,7 +23,6 @@ const Admin: FC<AdminProps> = ({ time, setTime, websocket: client, infos }) => {
     //const url = 'http://localhost:4000/timelst/';
 
     const addTime = () => {
-        sTime.current?.value.match(/\d\d:\d\d/gm)
         let array: TimeList[] = [];
         const delta = sDelta.current != null ? parseInt(sDelta.current.value) : 10;
         let hour, min;
@@ -77,9 +76,10 @@ const Admin: FC<AdminProps> = ({ time, setTime, websocket: client, infos }) => {
             <div className="admin">
                 <label> Uhrzeit eingeben </label>
                 <input type="text" placeholder="Uhrzeit" name="sTime" onChange={(e) => {
-                    console.log(sTime.current?.value)
-                    setBtnDis(sTime.current?.value.match(/\d\d:\d\d/gm) != null);
-                    console.log(btn_dis);
+                    if (sTime.current !== null && sTime.current.value.match(/^([0-1][0-9]|2[0-4]):\d\d$/))
+                        setBtnDis(true);
+                    else
+                        setBtnDis(false);
                 }} ref={sTime} /><br />
                 <select ref={sDelta}>
                     <option value="5">5 min</option>
@@ -98,7 +98,8 @@ const Admin: FC<AdminProps> = ({ time, setTime, websocket: client, infos }) => {
                     </div>
                 )
                 )}
-                {<button onClick={addTime}>Time</button>}
+                {!btn_dis && <p>Eine richtige Uhrzeit eingeben</p>}
+                <button onClick={addTime} disabled={!btn_dis}>Time</button>
 
             </div>
             <div className="admintime">

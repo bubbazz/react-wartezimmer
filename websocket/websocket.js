@@ -37,14 +37,12 @@ const WriteFile = (path, data,) => {
         }
     })
 };
-const ReadFile = (path, datavar) => {
+const ReadFile = (path, con, what) => {
     fs.readFile(path, "utf8", (err, filecontent) => {
         console.log("reading Data " + path);
-        datavar = filecontent;
+        JsonSend(con, what, filecontent)
     });
 };
-ReadFile("data/infotop.txt", infotop);
-ReadFile("data/infobot.txt", infobot);
 
 wsServer.on('request', function (request) {
     var userID = getUniqueID();
@@ -55,8 +53,8 @@ wsServer.on('request', function (request) {
     console.log('connected: ' + userID)
 
     JsonSend(connection, 'lst', mes);
-    JsonSend(connection, 'infotop', infotop);
-    JsonSend(connection, 'infobot', infobot);
+    ReadFile("data/infotop.txt", connection, "infotop");
+    ReadFile("data/infobot.txt", connection, "infobot");
 
     //let interval = setInterval(() => connection.send(JSON.stringify({ what: 'time', data: new Date().toString() })), 1000);
     //JSON.stringify({ what: 'time', data: new Date() })
@@ -84,9 +82,10 @@ wsServer.on('request', function (request) {
     });
     connection.on('close', function (reasonCode, description) {
         console.log('Client has disconnected.');
-        var index = clients.indexOf({ id: userID, connection: connection })
-        if (index >= 0 && index <= clients.length)
-            clients.splice(index, 1);
+        clients.forEach((c, index) => {
+            if (c.id === userID && index >= 0 && index <= clients.length)
+                clients.splice(index, 1)
+        });
         //clearInterval(interval);
     });
 });
